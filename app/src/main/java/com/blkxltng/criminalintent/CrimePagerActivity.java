@@ -76,7 +76,7 @@ public class CrimePagerActivity extends AppCompatActivity {
                 } else {
                     mFirstButton.setVisibility(View.VISIBLE);
                 }
-                if(mViewPager.getCurrentItem() == mCrimes.size()-1) {
+                if(mViewPager.getCurrentItem() == mViewPager.getAdapter().getCount()-1) {
                     mLastButton.setVisibility(View.INVISIBLE);
                 } else {
                     mLastButton.setVisibility(View.VISIBLE);
@@ -104,7 +104,7 @@ public class CrimePagerActivity extends AppCompatActivity {
         mLastButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mViewPager.setCurrentItem(mCrimes.size()-1);
+                mViewPager.setCurrentItem(mViewPager.getAdapter().getCount()-1);
             }
         });
     }
