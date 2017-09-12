@@ -16,6 +16,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -30,14 +32,18 @@ public class CrimeFragment extends Fragment {
 
     private static final String ARG_CRIME_ID = "crime_id";
     private static final String DIALOG_DATE = "DialogDate";
+    private static final String DIALOG_TIME = "DialogTime";
 
+    public static final String TIME_FORMAT = "hh:mm a z";
 
     private static final int REQUEST_DATE = 0;
+    private static final int REQUEST_TIME = 1;
 
     private Crime mCrime;
     private EditText mTitleField;
     private Button mDateButton;
     private CheckBox mSolvedCheckbox;
+    private Button mTimeButton;
 
     public static CrimeFragment newInstance(UUID crimeId) {
         Bundle args = new Bundle();
@@ -100,6 +106,17 @@ public class CrimeFragment extends Fragment {
             }
         });
 
+        mTimeButton = (Button) v.findViewById(R.id.crime_time);
+        mTimeButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager manager = getFragmentManager();
+                TimePickerFragment dialog = new TimePickerFragment().newInstance(mCrime.getDate());
+                dialog.setTargetFragment(CrimeFragment.this, REQUEST_TIME);
+                dialog.show(manager, DIALOG_TIME);
+            }
+        });
+
         return v;
     }
 
@@ -115,9 +132,20 @@ public class CrimeFragment extends Fragment {
             mCrime.setDate(date);
             updateDate();
         }
+
+        if (requestCode == REQUEST_TIME) {
+            Date time = (Date) data.getSerializableExtra(TimePickerFragment.EXTRA_TIME);
+            mCrime.setDate(time);
+            updateTime();
+        }
     }
 
     private void updateDate() {
         mDateButton.setText(mCrime.getDate().toString());
+    }
+
+    private void updateTime() {
+        DateFormat timeFormat = new SimpleDateFormat(TIME_FORMAT);
+        mTimeButton.setText(timeFormat.format(mCrime.getDate()));
     }
 }
