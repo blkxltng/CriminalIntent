@@ -16,7 +16,8 @@ public class DatePickerActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        return new DatePickerFragment();
+        Date date = (Date) getIntent().getSerializableExtra(EXTRA_DATE);
+        return DatePickerFragment.newInstance(date);
     }
 
     public static Intent newIntent(Context packageContext, Date date) {
