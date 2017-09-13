@@ -1,5 +1,6 @@
 package com.blkxltng.criminalintent;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,9 +18,9 @@ import java.util.UUID;
  * Created by firej on 9/6/2017.
  */
 
-public class CrimePagerActivity extends AppCompatActivity {
+public class CrimePagerActivity extends AppCompatActivity implements CrimeFragment.OnDeleteCrimeListener {
 
-    private static final String EXTRA_CRIME_ID = "com.blkxltng.criminalintent.crime_id";
+    public static final String EXTRA_CRIME_ID = "com.blkxltng.criminalintent.crime_id";
 
     private ViewPager mViewPager;
     private List<Crime> mCrimes;
@@ -33,6 +34,7 @@ public class CrimePagerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_crime_pager);
 
         UUID crimeId = (UUID) getIntent().getSerializableExtra(EXTRA_CRIME_ID);
@@ -60,5 +62,12 @@ public class CrimePagerActivity extends AppCompatActivity {
                 break;
             }
         }
+    }
+
+    public void onCrimeIdSelected (UUID crimeId) {
+        Intent data = new Intent();
+        data.putExtra(EXTRA_CRIME_ID, crimeId);
+        setResult(Activity.RESULT_OK, data);
+        finish(); // CrimePagerActivity
     }
 }

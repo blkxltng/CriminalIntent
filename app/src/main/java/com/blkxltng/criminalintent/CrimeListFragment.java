@@ -1,5 +1,6 @@
 package com.blkxltng.criminalintent;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by firej on 8/30/2017.
@@ -25,10 +27,13 @@ import java.util.List;
 public class CrimeListFragment extends Fragment {
 
     private static final String SAVED_SUBTITLE_VISIBLE = "subtitle";
+    private static final int REQUEST_CRIME = 0;
 
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
     private boolean mSubtitleVisible;
+
+    private int crimePosition = -1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -150,7 +155,7 @@ public class CrimeListFragment extends Fragment {
         @Override
         public void onClick(View view) {
             Intent intent = CrimePagerActivity.newIntent(getActivity(), mCrime.getId());
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_CRIME);
         }
     }
 
@@ -169,6 +174,7 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(CrimeHolder holder, int position) {
+            crimePosition = position;
             Crime crime = mCrimes.get(position);
             holder.bind(crime);
         }
@@ -176,6 +182,23 @@ public class CrimeListFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mCrimes.size();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        if (requestCode == REQUEST_CRIME) {
+            if (data == null) {
+                return;
+            }
+
+            UUID crimeId = (UUID) data.getSerializableExtra(CrimePagerActivity.EXTRA_CRIME_ID);
+            CrimeLab crimeLab = CrimeLab.get(getActivity());
+            Crime crime = crimeLab.getCrime(crimeId);
+            crimeLab.removeCrime(crime);
         }
     }
 }
