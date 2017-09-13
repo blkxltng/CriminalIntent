@@ -33,8 +33,6 @@ public class CrimeListFragment extends Fragment {
     private CrimeAdapter mAdapter;
     private boolean mSubtitleVisible;
 
-    private int crimePosition = -1;
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,7 +172,6 @@ public class CrimeListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(CrimeHolder holder, int position) {
-            crimePosition = position;
             Crime crime = mCrimes.get(position);
             holder.bind(crime);
         }
