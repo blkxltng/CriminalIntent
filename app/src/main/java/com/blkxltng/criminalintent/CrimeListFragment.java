@@ -13,7 +13,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -29,6 +31,9 @@ public class CrimeListFragment extends Fragment {
     private RecyclerView mCrimeRecyclerView;
     private CrimeAdapter mAdapter;
     private boolean mSubtitleVisible;
+
+    private LinearLayout mNoCrimeLayout;
+    private Button mNoCrimeButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +52,18 @@ public class CrimeListFragment extends Fragment {
         if(savedInstanceState != null) {
             mSubtitleVisible = savedInstanceState.getBoolean(SAVED_SUBTITLE_VISIBLE);
         }
+
+        mNoCrimeLayout = (LinearLayout) view.findViewById(R.id.no_crime_layout);
+        mNoCrimeButton = (Button) view.findViewById(R.id.no_crime_button);
+        mNoCrimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Crime crime = new Crime();
+                CrimeLab.get(getActivity()).addCrime(crime);
+                Intent intent = CrimePagerActivity.newIntent(getActivity(), crime.getId());
+                startActivity(intent);
+            }
+        });
 
         updateUI();
 
@@ -113,6 +130,12 @@ public class CrimeListFragment extends Fragment {
     private void updateUI() {
         CrimeLab crimeLab = CrimeLab.get(getActivity());
         List<Crime> crimes = crimeLab.getCrimes();
+
+        if(crimes.size() > 0) {
+            mNoCrimeLayout.setVisibility(View.INVISIBLE);
+        } else {
+            mNoCrimeLayout.setVisibility(View.VISIBLE);
+        }
 
         if(mAdapter == null) {
             mAdapter = new CrimeAdapter(crimes);
