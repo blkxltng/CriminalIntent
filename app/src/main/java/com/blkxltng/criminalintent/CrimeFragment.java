@@ -30,7 +30,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -260,20 +259,7 @@ public class CrimeFragment extends Fragment {
     }
 
     private void updateDate() {
-        Locale spanish = new Locale("es", "ES");
-        if (getCurrentLocale() == spanish) {
-//            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            SimpleDateFormat format = new SimpleDateFormat(mCrime.getDate().toString(), spanish);
-//            try {
-//                Date parsed = format.parse(mCrime.getDate().toString());
-//                mDateButton.setText(parsed.toString());
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-            mDateButton.setText(format.toString()            );
-        } else {
-            mDateButton.setText(mCrime.getDate().toString());
-        }
+        mDateButton.setText(formatDate(mCrime));
     }
 
     private String getCrimeReport() {
@@ -283,9 +269,7 @@ public class CrimeFragment extends Fragment {
         } else {
             solvedString = getString(R.string.crime_report_unsolved);
         }
-
-        String dateFormat = "EEE, MMM dd";
-        String dateString = DateFormat.format(dateFormat, mCrime.getDate()).toString();
+        String dateString = formatDate(mCrime);
 
         String suspect = mCrime.getSuspect();
         if(suspect == null) {
@@ -308,12 +292,18 @@ public class CrimeFragment extends Fragment {
         }
     }
 
-    public Locale getCurrentLocale(){
+    private Locale getCurrentLocale(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
             return getResources().getConfiguration().getLocales().get(0);
         } else{
             //noinspection deprecation
             return getResources().getConfiguration().locale;
         }
+    }
+
+    private String formatDate(Crime crime) {
+        String format = DateFormat.getBestDateTimePattern(getCurrentLocale(), "EEE MMM dd HH:mm:ss zz yyyy");
+        String dateString = DateFormat.format(format, crime.getDate()).toString();
+        return dateString;
     }
 }
