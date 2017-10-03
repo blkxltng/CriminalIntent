@@ -8,6 +8,7 @@ import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
@@ -29,8 +30,10 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import static android.widget.CompoundButton.OnCheckedChangeListener;
@@ -86,6 +89,8 @@ public class CrimeFragment extends Fragment {
         UUID crimeId = (UUID) getArguments().getSerializable(ARG_CRIME_ID);
         mCrime = CrimeLab.get(getActivity()).getCrime(crimeId);
         mPhotoFile = CrimeLab.get(getActivity()).getPhotoFile(mCrime);
+
+        Locale current = getCurrentLocale();
     }
 
     @Override
@@ -255,7 +260,20 @@ public class CrimeFragment extends Fragment {
     }
 
     private void updateDate() {
-        mDateButton.setText(mCrime.getDate().toString());
+        Locale spanish = new Locale("es", "ES");
+        if (getCurrentLocale() == spanish) {
+//            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            SimpleDateFormat format = new SimpleDateFormat(mCrime.getDate().toString(), spanish);
+//            try {
+//                Date parsed = format.parse(mCrime.getDate().toString());
+//                mDateButton.setText(parsed.toString());
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+            mDateButton.setText(format.toString()            );
+        } else {
+            mDateButton.setText(mCrime.getDate().toString());
+        }
     }
 
     private String getCrimeReport() {
@@ -287,6 +305,15 @@ public class CrimeFragment extends Fragment {
         } else {
             Bitmap bitmap = PictureUtils.getScaledBitmap(mPhotoFile.getPath(), getActivity());
             mPhotoView.setImageBitmap(bitmap);
+        }
+    }
+
+    public Locale getCurrentLocale(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+            return getResources().getConfiguration().getLocales().get(0);
+        } else{
+            //noinspection deprecation
+            return getResources().getConfiguration().locale;
         }
     }
 }
