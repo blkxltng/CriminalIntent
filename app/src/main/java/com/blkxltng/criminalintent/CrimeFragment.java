@@ -246,6 +246,15 @@ public class CrimeFragment extends Fragment {
             getActivity().revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             updateCrime();
             updatePhotoView();
+
+            int DELAY_ANNOUNCMENT = 1000;
+
+            mPhotoView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mPhotoView.announceForAccessibility("The crime photo has been updated.");
+                }
+            }, DELAY_ANNOUNCMENT);
         }
     }
 
