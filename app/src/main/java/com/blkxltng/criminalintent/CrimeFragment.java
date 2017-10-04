@@ -252,7 +252,7 @@ public class CrimeFragment extends Fragment {
             mPhotoView.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    mPhotoView.announceForAccessibility("The crime photo has been updated.");
+                    mPhotoView.announceForAccessibility(getString(R.string.crime_photo_updated_announcement));
                 }
             }, DELAY_ANNOUNCMENT);
         }
