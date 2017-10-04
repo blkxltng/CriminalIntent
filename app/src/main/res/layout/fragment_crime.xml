@@ -63,7 +63,8 @@
     <Button
         android:id="@+id/crime_date"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/crime_date_button_description"/>
     
     <CheckBox
         android:id="@+id/crime_solved"
@@ -75,7 +76,8 @@
         android:id="@+id/crime_suspect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/crime_suspect_text"/>
+        android:text="@string/crime_suspect_text"
+        android:contentDescription="@string/crime_suspect_button_description"/>
 
     <Button
         android:id="@+id/crime_report"

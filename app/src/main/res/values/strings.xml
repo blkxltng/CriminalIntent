@@ -21,4 +21,6 @@
     <string name="crime_report_suspect">The suspect is %s</string>
     <string name="crime_report_subject">CriminalIntent Crime Report</string>
     <string name="send_report">Send crime report via</string>
+    <string name="crime_date_button_description">Set a date for the crime</string>
+    <string name="crime_suspect_button_description">Choose a suspect for the crime</string>
 </resources>
