@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -141,7 +142,7 @@ public class CrimeListFragment extends Fragment {
         private Crime mCrime;
         private TextView mTitleTextView;
         private TextView mDateTextView;
-        private ImageView mSovledImageView;
+        private ImageView mSolvedImageView;
 
         public CrimeHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_crime, parent, false));
@@ -149,14 +150,16 @@ public class CrimeListFragment extends Fragment {
             itemView.setOnClickListener(this);
             mTitleTextView = (TextView) itemView.findViewById(R.id.crime_title);
             mDateTextView = (TextView) itemView.findViewById(R.id.crime_date);
-            mSovledImageView = (ImageView) itemView.findViewById(R.id.crime_solved);
+            mSolvedImageView = (ImageView) itemView.findViewById(R.id.crime_solved);
         }
 
         public void bind(Crime crime) {
             mCrime = crime;
             mTitleTextView.setText(mCrime.getTitle());
-            mDateTextView.setText(mCrime.getDate().toString());
-            mSovledImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
+//            mDateTextView.setText(mCrime.getDate().toString());
+            mDateTextView.setText(formatDate(mCrime));
+            mSolvedImageView.setVisibility(crime.isSolved() ? View.VISIBLE : View.GONE);
+            mSolvedImageView.setContentDescription(crime.isSolved() ? "Crime has been solved" : "Crime has not been solved");
         }
 
         @Override
@@ -198,5 +201,11 @@ public class CrimeListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mCallbacks = null;
+    }
+
+    private String formatDate(Crime crime) {
+        String format = "EEE MMM dd yyyy HH:mm zz";
+        String dateString = DateFormat.format(format, crime.getDate()).toString();
+        return dateString;
     }
 }
